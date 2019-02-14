@@ -1,6 +1,5 @@
 // importing d3 modules
 import {select} from "d3-selection";
-import {transition} from "d3-transition";
 import {nest} from "d3-collection";
 
 // importing util functions
