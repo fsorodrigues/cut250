@@ -1,0 +1,45 @@
+.d3-section-container {
+    display: grid;
+    grid-template-columns: 40% auto 40% 5%;
+    grid-template-rows: 25px 30px;
+    grid-template-areas:
+        "title title title title"
+        "count separator pct margin";
+}
+
+@media (max-width:600px) {
+    .d3-section-container {
+        grid-template-columns: 40% 60%;
+        grid-template-rows: 25px 30px 30px;
+        grid-template-areas:
+            "title title"
+            "count separator"
+            "pct margin";
+    }
+}
+
+
+.d3-sidebar-title {
+    grid-area: title
+}
+
+.d3-sidebar-value {
+    grid-area: count;
+    text-align: right;
+}
+
+.d3-sidebar-pct {
+    grid-area: pct;
+    text-align: left;
+}
+
+.d3-sidebar-spacer {
+    grid-area: separator;
+    text-align: center;
+}
+
+@media (max-width:600px) {
+    .d3-sidebar-spacer {
+        display:none;
+    }
+}

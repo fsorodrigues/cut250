@@ -6,6 +6,12 @@ import {csv} from "d3-fetch";
 import {isMobile} from "./utils/utils";
 
 // importing CSS
+import './style/main.css';
+import './style/sidebar.css';
+import './style/header.css';
+import './style/typography.css';
+import './style/slider.css';
+import './style/tooltip.css';
 
 // importing containers
 import Main from './containers/Main';
@@ -14,18 +20,18 @@ import Main from './containers/Main';
 const mobile = isMobile();
 
 // instantiating containers
-const main = Main();
+const main = Main()
+    .isMobile(mobile);
 
 // loading data
 const data = csv('./data/data.csv', d => d);
 
+// layout variables
+const margin = {t:0, r:0, b:0, l:0};
+
 // calling drawing function
 data.then(data => {
-
-    main.isMobile(mobile)
-        .defaultChamber('House');
-
-    select('.content')
+    select("#dashboard")
         .data([data])
         .each(main);
 });

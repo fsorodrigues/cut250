@@ -1,143 +1,96 @@
 // importing d3 modules
-import {select,mouse} from "d3-selection";
+import {select} from "d3-selection";
 import {transition} from "d3-transition";
+import {nest} from "d3-collection";
 
 // importing util functions
 import {getLength} from "../utils/utils";
 
 // importing CSS
-import '../style/main.css';
 
 // importing containers
-
-// importing components
-import Controller from '../components/Controller';
-import Squares from '../components/Squares';
-import Tooltip from '../components/Tooltip';
+import Sidebar from './Sidebar';
+import Header from './Header';
 
 // instantiating containers
-const controller = Controller();
-const squares = Squares();
-const tooltip = Tooltip();
+const sidebar = Sidebar();
+const header = Header();
+
+// importing components
+import Container from '../components/Container';
+
+// instantiating component
+const type = Container();
 
 function Main(_) {
 
     let _margin = {t:0, r:0, b:0, l:0};
     let _isMobile = false;
-    let _chamberConfig = [
-        {chamber:"House",isMobile:false,rowLength:17},
-        {chamber:"House",isMobile:true,rowLength:11},
-        {chamber:"Senate",isMobile:false,rowLength:9},
-        {chamber:"Senate",isMobile:true,rowLength:5}
-    ];
-    let _defaultChamber = "House";
+    let _rowHeight = 25;
 
     function exports(data) {
 
-        // access to root elements
+        // access to root element
         const root = this;
         const container = select(this);
 
         // root element dimensions
-        const clientWidth = root.clientWidth;
-        const clientHeight = root.clientHeight;
-        const margin = _margin;
-        const w = clientWidth - (margin.r + margin.l);
-        const h = clientHeight - (margin.t + margin.b);
 
-        // getting unique values
-        const listChambers = [...new Set(data.map(item => item.chamber))];
-
-        controller.activeBtn(_defaultChamber);
-        // appending container for buttons
-        let btnUpdate = container.selectAll('.btn-container')
-            .data([listChambers]);
-        const btnEnter = btnUpdate.enter()
+        /* MAIN SECTION */
+        // append <div> container for chart & call drawing function
+        let dashboardContainerUpdate = container.selectAll('.d3-dashboard-main')
+            .data([data]);
+        const dashboardContainerEnter = dashboardContainerUpdate.enter()
             .append('div')
-            .classed('btn-container',true);
-        btnUpdate.exit().remove();
-        btnUpdate = btnUpdate.merge(btnEnter)
-            .each(controller);
+            .classed('d3-dashboard-main',true);
+        dashboardContainerUpdate.exit().remove();
+        dashboardContainerUpdate = dashboardContainerUpdate.merge(dashboardContainerEnter);
 
-        // filtering data by chamber
-        const filterData = data.filter(d => d.chamber === _defaultChamber);
+        // nesting data by type
+        const nestedData = nest()
+            .key(d => d.Type)
+            .sortValues((a,b) => (+b.Count) - (+a.Count))
+            .entries(data);
 
-        const rowLength = getLength(_chamberConfig,_defaultChamber,_isMobile,"rowLength");
+        // passing down values to function
+        type.rowHeight(_rowHeight)
+            .isMobile(_isMobile);
 
-        squares.rowLength(rowLength);
-
-        // appending container for nodes
-        let mapUpdate = container.selectAll('.map-container')
-            .data([filterData]);
-        const mapEnter = mapUpdate.enter()
+        let typeWrapperUpdate = dashboardContainerUpdate.selectAll('.d3-type-wrapper')
+            .data(nestedData);
+        const typeWrapperEnter = typeWrapperUpdate.enter()
             .append('div')
-            .classed('map-container',true)
-            .classed('clearfix',true);
-        mapUpdate.exit().remove();
-        mapUpdate = mapUpdate.merge(mapEnter)
-            .each(squares);
+            .classed('d3-type-wrapper',true);
+        typeWrapperUpdate.exit().remove();
+        typeWrapperUpdate = typeWrapperUpdate.merge(typeWrapperEnter)
+            .each(type);
 
-        // appending container for tooltip
-        let tooltipUpdate = container.selectAll('.tooltip-container')
-            .data([1]);
-        const tooltipEnter = tooltipUpdate.enter()
+        /* SIDEBAR SECTION */
+        // passing down values to function
+        sidebar.rowHeight(_rowHeight)
+            .isMobile(_isMobile);
+
+        let sidebarContainerUpdate = container.selectAll('.d3-dashboard-sidebar')
+            .data([nestedData]);
+        const sidebarContainerEnter = sidebarContainerUpdate.enter()
             .append('div')
-            .classed('tooltip-container',true);
-        tooltipUpdate.exit().remove();
-        tooltipUpdate = tooltipUpdate.merge(tooltipEnter);
+            .classed('d3-dashboard-sidebar',true);
+        sidebarContainerUpdate.exit().remove();
+        sidebarContainerUpdate = sidebarContainerUpdate.merge(sidebarContainerEnter)
+            .each(sidebar);
 
-        // EVENT-HANDLING
-        // toggle active status for button
-        controller.on('btn:clicked',function(d) {
-            controller.activeBtn(d);
-            btnUpdate.each(controller);
-        })
-        .on('chart:redraw',function(d) {
-            const newData = data.filter(e => e.chamber === d);
-            const newLength = getLength(_chamberConfig,d,_isMobile,"rowLength");
+        /* HEADER SECTION */
+        // passing down values to function
+        header.isMobile(_isMobile);
 
-            squares.rowLength(newLength);
-            mapUpdate.data([newData])
-                .each(squares);
-        });
-
-        // enter node
-        tooltip.parentWidth(mapUpdate.node().clientWidth);
-        squares.on('node:enter',function(d,i) {
-            const thisEl = select(this);
-            const thisClass = thisEl.attr('class');
-
-            mapUpdate.selectAll(`.${thisClass}`)
-                .filter((e,l) => l !== i)
-                .transition()
-                .duration(200)
-                .style('opacity', 0.6);
-
-            thisEl.style('opacity', 1);
-
-        })
-        // toggle tooltip
-        .on('tooltip:toggle',function(d) {
-            tooltip.mouse(mouse(document.body));
-            tooltipUpdate.data([d])
-                .each(tooltip);
-        })
-        // leave node
-        .on('node:leave',function(d) {
-            const thisEl = select(this);
-            const thisClass = thisEl.attr('class');
-
-            mapUpdate.selectAll(`.${thisClass}`)
-                .transition()
-                .duration(100)
-                .style('opacity', 1);
-        })
-        // untoggle tooltip
-        .on('tooltip:untoggle',function(d) {
-            tooltip.mouse([-100,-100]);
-            tooltipUpdate.data([d])
-                .each(tooltip);
-        });
+        let headerContainerUpdate = container.selectAll('.d3-dashboard-header')
+            .data([data]);
+        const headerContainerEnter = headerContainerUpdate.enter()
+            .append('div')
+            .classed('d3-dashboard-header',true);
+        headerContainerUpdate.exit().remove();
+        headerContainerUpdate = headerContainerUpdate.merge(headerContainerEnter)
+            .each(header);
 
     }
 
@@ -146,13 +99,6 @@ function Main(_) {
         // _ expects a boolean
         if (_ === 'undefined') return _isMobile;
         _isMobile = _;
-        return this;
-    };
-
-    exports.defaultChamber = function(_) {
-        // _ expects a string
-        if (_ === 'undefined') return _defaultChamber;
-        _defaultChamber = _;
         return this;
     };
 

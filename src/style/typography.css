@@ -1,38 +1,96 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,700|Roboto+Slab:400,700);
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700|Roboto+Slab:300,700');
 
-.tooltip-container {
-    font-family: "Roboto", Verdana, sans-serif;
+.d3-viz-wrapper {
+    font-family: 'Roboto',Verdana,sans-serif;
 }
 
-.d3-loc-tooltip {
-    font-size: 0.7rem;
-    color: grey;
-    margin: 0.5rem 0.3rem 0.5rem 0.3rem;
+.d3-row-container,
+.d3-section-container {
+    align-items: baseline;
 }
 
-.d3-name-tooltip {
-    font-size: 1rem;
-    margin: 0.5rem 0.3rem 0.5rem 0.3rem;
+.d3-row-title {
+    font-family: 'Roboto Slab',serif;
+    font-weight: 300;
+    font-variant: small-caps;
 }
 
-.d3-name-tooltip span.party {
+.d3-sidebar-title {
+    font-variant: small-caps;
+    align-items: baseline;
+}
+
+@media (max-width:600px) {
+    .d3-sidebar-title {
+        font-size: 0.8rem;
+    }
+}
+
+.d3-sidebar-title h3 {
+    font-weight: 300;
+}
+
+
+.d3-sidebar-value,
+.d3-sidebar-pct {
+    font-weight: 700;
     font-size: 0.8rem;
-    margin: 0 0 0 0.2rem;
-    padding: 0.2rem 0.5rem 0.1rem 0.5rem;
 }
 
-.d3-name-tooltip .democratic {
-    background-color: #3574B2;
+.d3-text {
+    margin: 0;
 }
 
-.d3-name-tooltip .progressive {
-    background-color: #9BC53D
+.d3-row-count,
+.d3-row-pct {
+    font-weight: 700;
+    font-size: 0.8rem;
 }
 
-.d3-name-tooltip .independent {
-    background-color: #F4D107
+.d3-numbers-count {
+    margin-right: 0.75rem;
 }
 
-.d3-name-tooltip .republican {
-    background-color: #C3423F
+.d3-numbers-pct {
+    margin-left: 0.75rem;
+}
+
+.d3-header-pct,
+.d3-header-value {
+    color: #FF8C00;
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: right;
+}
+
+.d3-header-title {
+    font-family: 'Roboto Slab',serif;
+}
+
+.d3-header-title h2 {
+    font-weight: 300;
+}
+
+@media (max-width:600px) {
+    .d3-header-title h2 {
+        font-size: 1.4rem;
+    }
+}
+
+.d3-header-value-title h5 {
+    font-family: 'Roboto Slab',serif;
+    font-weight: 300;
+    font-variant: small-caps;
+}
+
+.d3-row-info {
+    font-size: 0.7rem;
+}
+
+.d3-info-button {
+    color:white;
+    background-color: #FFD589;
+    border: 1pt solid #FFD589;
+    padding: 0 0.25rem;
+    border-radius: 5px;
 }

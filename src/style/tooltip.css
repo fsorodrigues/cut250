@@ -1,0 +1,11 @@
+.d3-tooltip {
+    color: #808080;
+    font-weight: 300;
+    font-size: 0.75rem;
+    line-height: 1.2rem;
+    background-color: #FFD589;
+    position: absolute;
+    width: 160px;
+    border-radius: 3px;
+    pointer-events: none;
+}

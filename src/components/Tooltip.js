@@ -2,79 +2,82 @@
 import {select} from 'd3-selection';
 
 // importing accessory functions
-import {chamberDict} from '../utils/utils';
+// import {} from '../utils/utils';
+
+// importing components
+import Title from './Title';
+
+// instantiating components
+const title = Title();
 
 // importing stylesheets
-import '../style/typography.css';
 
 function Tooltip() {
 
-    //
-    let _mouse = {x:0,y:0};
-    let _parentWidth = 200;
+    let _buttonCoordinates;
+    let _toggle = true;
+    let _isMobile = false;
 
     function exports(data) {
 
         // access to root elements
         const root = this;
         const container = select(this);
-        const containerWidth = root.clientWidth;
-        const docWidth = document.body.clientWidth;
-        const docHeight = document.body.clientHeight;
 
-        // appending text to tooltip
-        let nameTootipUpdate = container.selectAll('.d3-name-tooltip')
-            .data([data]);
-        const nameTootipEnter = nameTootipUpdate.enter()
-            .append('h4')
-            .classed('d3-name-tooltip',true);
-        nameTootipUpdate.exit().remove();
-        nameTootipUpdate = nameTootipUpdate.merge(nameTootipEnter)
-            .html(d => {
-                return `${d.candidate_name} <span class='party ${d.party.toLowerCase()}'>${d.party[0]}</span>`;
-            });
+        if (_toggle ){
+            // parent coordinates
+            const parentCoordinates = root.parentNode.getBoundingClientRect();
 
-        let locTootipUpdate = container.selectAll('.d3-loc-tooltip')
-            .data([data]);
-        const locTootipEnter = locTootipUpdate.enter()
-            .append('p')
-            .classed('d3-loc-tooltip',true);
-        locTootipUpdate.exit().remove();
-        locTootipUpdate = locTootipUpdate.merge(locTootipEnter)
-            .text(d => `${chamberDict[d.chamber]} ${d.district}`);
+            // append tooltip container
+            let tooltipTitleUpdate = container.selectAll('.d3-tooltip-title')
+                .data([data].map(d => `Includes: ${d.Subtypes}`));
+            const tooltipTitleEnter = tooltipTitleUpdate.enter()
+                .append('div')
+                .classed('d3-tooltip-title',true);
+            tooltipTitleUpdate.exit().remove();
+            tooltipTitleUpdate = tooltipTitleUpdate.merge(tooltipTitleEnter)
+                .style('padding','0.5rem')
+                .each(title);
 
-        const containerHeight = root.clientHeight;
+            // handle vertical position
+            container.style('top',`${_buttonCoordinates.top - parentCoordinates.top}px`);
 
-        // handling positions
-        // horizontal position
-        if (_mouse.x > _parentWidth/2) {
-            const padd = docWidth - _parentWidth;
-            container.style('left',``)
-                .style('right', `${padd + (_parentWidth - _mouse.x)}px`);
+            // handle horizontal position
+            if (_isMobile) {
+                container.style('left','')
+                    .style('right',`${parentCoordinates.right - _buttonCoordinates.right}px`);
+            } else {
+                container.style('left',`${_buttonCoordinates.left - parentCoordinates.left}px`)
+                    .style('right','');
+            }
+
+
         } else {
-            container.style('left',`${_mouse.x}px`)
-                .style('right', ``);
-        }
-
-        // vertical position
-        if (_mouse.y > docHeight/2) {
-            container.style('top',`${_mouse.y - containerHeight}px`);
-        } else {
-            container.style('top',`${_mouse.y}px`);
+            container.style('top',`${-1000}px`)
+                .style('left',`${-1000}px`)
+                .style('right','');
         }
 
     }
 
-    exports.mouse = function(_) {
-        // _ expects an object with t,r,b,l properties
-        if (_ === 'undefined') return _mouse;
-        [_mouse.x,_mouse.y] = _;
+    exports.isMobile = function(_) {
+        // _ expects a boolean
+        if (_ === 'undefined') return _isMobile;
+        _isMobile = _;
         return this;
     };
 
-    exports.parentWidth = function(_) {
-        if (_ === 'undefined') return _parentWidth;
-        _parentWidth = _;
+    exports.buttonCoordinates = function(_) {
+        // _ expects a json object
+        if (_ === 'undefined') return _buttonCoordinates;
+        _buttonCoordinates = _;
+        return this;
+    };
+
+    exports.toggle = function(_) {
+        // _ expects a json object
+        if (_ === 'undefined') return _toggle;
+        _toggle = _;
         return this;
     };
 

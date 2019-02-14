@@ -1,0 +1,43 @@
+.d3-header-container {
+    display: grid;
+    grid-template-columns: 50% 15% 15% 15% auto;
+    grid-template-rows: 20px 75px;
+    grid-template-areas:
+        "title separator count_head pct_head margin"
+        "title separator count pct margin"
+}
+
+@media (max-width:600px) {
+    .d3-header-container {
+        grid-template-columns: 60% 40%;
+        grid-template-rows: 20px 50px 80px;
+        grid-template-areas:
+            "title count_head"
+            "title count"
+            "title pct"
+    }
+}
+
+.d3-header-title {
+    grid-area: title;
+}
+
+.d3-header-value {
+    grid-area: count;
+}
+
+.d3-header-pct {
+    grid-area: pct;
+}
+
+.d3-header-value-title {
+    grid-area: count_head;
+    text-align: right;
+    align-items: baseline;
+}
+
+.d3-header-pct-title {
+    grid-area: pct_head;
+    text-align: right;
+    align-items: baseline;
+}

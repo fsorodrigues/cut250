@@ -1,3 +1,18 @@
+// importing d3.js
+import {timeParse,timeFormat} from "d3-time-format";
+import {format} from "d3-format";
+
+export const formatPct = format(".0%");
+export const formatInt = format(",.0f");
+
+export const isPct = d => d ? 'pct' : 'count';
+
+export const replace = text => text.replace('misdemeanor ','').replace('felony ','');
+
+export const parseTime = timeParse('%Y-%m-%d');
+export const formatTimeYear = timeFormat('%Y');
+export const formatTimeMonthDayYear = timeFormat('%b %d, %Y');
+
 export const isMobile = () => {
 	if (navigator.userAgent.match(/Android/i)
 	|| navigator.userAgent.match(/webOS/i)
@@ -14,24 +29,4 @@ export const isMobile = () => {
 		return false;
 
 	}
-};
-
-// extracting property from object
-export const getLength = (obj,chamber,mobile,prop) => {
-	return obj.filter(d => {
-		return (d.chamber === chamber) &&
-			   (d.isMobile === mobile);
-		   })[0][prop];
-};
-
-export const partyDict = {
-	Democratic: "#3574B2",
-	Republican: "#C3423F",
-	Independent: "#F4D107",
-	Progressive: "#9BC53D"
-};
-
-export const chamberDict = {
-	House: "Rep.",
-	Senate: "Sen."
 };
