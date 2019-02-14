@@ -1,0 +1,13 @@
+﻿Crime Type,Count,Percentage,Subtypes,Description,Type
+02:F/Person,139,8.4632517,"Assault and Robbery, Lewd and Lascivious",Felony Person,Felony
+03:F/Property,256,15.5159614,"Burglary, Grand Larceny, Arson",Felony Property,Felony
+04:F/Drug,97,5.5679287,"Dealing, Trafficking, Possession and Sale",Felony Drug,Felony
+01:F/Serious,987,56.1247216,"Murder, Aggravated and Sexual Assault",Felony Serious,Felony
+05:F/MotorV,56,3.3407572,Multiple DUIs,Felony  Motor Vehicle,Felony
+06:F/Other,35,1.8559762,"Obstruction of Justice, Fugitive",Felony Other,Felony
+07:M/Person,60,2.8210839,"Domestic Assault, Simple Assault",Misdemeanor Person,Misdemeanor
+08:M/Property,16,0.8908686,"Unlawful Trespass, Retail Theft",Misdemeanor Property,Misdemeanor
+09:M/Drug,4,0.1484781,Possession,Misdemeanor Drug,Misdemeanor
+10:M/MotorV,11,0.5939124,"Negligent Operation, DLS",Misdemeanor Motor Vehicle,Misdemeanor
+11:M/Other,6,0.2227171,Disorderly Conduct,Misdemeanor Other,Misdemeanor
+Unknown,60,4.454343,"Federal Detainees, charges not known",Unknown,Other
